@@ -1,9 +1,12 @@
 # coding=UTF-8
 from simpleparser import *
 from bookcollection import *
+import time
 
-isbn = 9789861943107
-parser = SimpleParser(isbn)
-data = BookCollection(parser.data)
+isbn = [9789862892077, 9789579556873 , 9789863360902, 9789888357802]
 
-print(data.result)
+for i in isbn:
+    parser = SimpleParser(i)
+    data = BookCollection(parser.data)
+    print(data.result)
+    time.sleep(10)
