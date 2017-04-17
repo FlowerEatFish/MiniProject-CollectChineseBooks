@@ -5,8 +5,7 @@ from bs4 import BeautifulSoup
 class BookCollection():
     result = {'name': '', 'author': '', 'ISBN': '', 'publisher': '', 'pub_year': '', 'edition': ''}
 
-    def __init__(self, isbn):
-        sourceCode = self.getFilterSourceCode(isbn)
+    def __init__(self, sourceCode):
         sourceCode = self.setFullBookDetail(sourceCode)
         self.result['name'] = self.getName(sourceCode)
         self.result['author'] = self.getAuthor(sourceCode)
@@ -14,17 +13,6 @@ class BookCollection():
         self.result['publisher'] = self.getpublisher(sourceCode)
         self.result['pub_year'] = self.getPubYear(sourceCode)
         self.result['edition'] = self.getEdition(sourceCode)
-        print(self.result)
-
-    def getFilterSourceCode(self, isbn):
-        url = 'http://nbinet3.ncl.edu.tw/search*cht/i?SEARCH=%d+&searchscope=1' % isbn
-        print(url)
-        browser = 'Chrome/55.0.2924.87'
-        header = {'user-agent': browser}
-        resource = requests.get(url, headers = header)
-        sourceCode = BeautifulSoup(resource.text, 'html.parser')
-        # print(sourceCode.prettify())
-        return sourceCode.find(class_ = 'bibMain')
 
     def setFullBookDetail(self, sourceCode):
         parser = sourceCode.find_all(class_ = 'bibInfoData')
