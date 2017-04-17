@@ -2,6 +2,7 @@
 from simpleparser import *
 from bookcollection import *
 
+isbn = 9789861943107 
 parser = SimpleParser(isbn)
 data = BookCollection(parser.data)
 
