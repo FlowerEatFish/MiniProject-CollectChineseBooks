@@ -28,17 +28,17 @@
 
 > #### Progress:
 >
-> - [ ] Read .xlsx file.
+> - [x] Read .xlsx file.
 >
-> - [ ] Catch ISBN in .xlsx file.
+> - [x] Catch ISBN in .xlsx file.
 >
-> - [ ] Collect book details from NBINET.
+> - [x] Collect book details from NBINET.
 >
 > - [ ] Write .xlsx file.
 >
 > - [ ] Design user interface (UI).
 >
-> - [ ] Manual find the path of .xlsx file.
+> - [x] Manual find the path of .xlsx file.
 >
 > - [ ] Auto find the amount of the books from .xlsx file.
 >
