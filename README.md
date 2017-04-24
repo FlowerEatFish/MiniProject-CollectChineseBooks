@@ -34,12 +34,12 @@
 >
 > - [x] Collect book details from NBINET.
 >
-> - [ ] Write .xlsx file.
+> - [x] Write .xlsx file.
 >
 > - [ ] Design user interface (UI).
 >
 > - [x] Manual find the path of .xlsx file.
 >
-> - [ ] Auto find the amount of the books from .xlsx file.
+> - [x] Auto find the amount of the books from .xlsx file.
 >
 > - [ ] Determine the book format (MARC21 or Chinese MARC).

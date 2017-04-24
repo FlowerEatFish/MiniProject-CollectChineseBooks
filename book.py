@@ -11,8 +11,7 @@ class Book():
     price = None
     package = None
 
-    def __init__(self, url):
-        sourceCode = self.getSourceCode(url)
+    def __init__(self, sourceCode):
         sourceCode = self.getFullBookDetail(sourceCode)
         self.setBookDetailTemplate(sourceCode)
 
