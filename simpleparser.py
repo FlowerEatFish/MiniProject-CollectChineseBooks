@@ -46,13 +46,16 @@ class SimpleParser():
         data = self.setDataList(sourceCode)
         data = self.setDataAllUrl(sourceCode, data)
         data = self.setDataAllLibrary(sourceCode, data)
+        print('Layer 1 data: %s' % str(data))
         return data[0]['url']
 
     def setDataList(self, sourceCode):
-        temp = {'url': None, 'library': []}
+        data = []
         sourceCode_string = sourceCode.prettify()
         count = sourceCode_string.count('browseEntryData')
-        data = [temp]*count
+        for i in range(count):
+            temp = {'url': None, 'library': []}
+            data.append(temp)
         return data
 
     def setDataAllUrl(self, sourceCode, data):
@@ -68,35 +71,32 @@ class SimpleParser():
         # set temp_index_Data
         temp_index_Data = []
         index = 0
-        while index < len(sourceCode):
+        while index < len(sourceCode.prettify()):
             index = sourceCode.prettify().find('browseEntryData', index)
-            print("browseEntryData:%d" % index)
             if index == -1:
                 break
             temp_index_Data.append(index)
+            index += 15
 
         # set temp_index_SubData
         temp_index_SubData = []
         index = 0
-        while index < len(sourceCode):
-            index = sourceCode.prettify().find('browseSubEntryData')
-            print("browseSubEntryData:%d" % index)
+        while index < len(sourceCode.prettify()):
+            index = sourceCode.prettify().find('browseSubEntryData', index)
             if index == -1:
                 break
             temp_index_SubData.append(index)
+            index += 18
 
         # set Library
         temp_library = sourceCode.find_all(class_ = 'browseSubEntryData')
-        print(len(temp_library), len(temp_index_SubData))
-        for i in range(len(temp_library)):
+        for i in range(len(temp_index_SubData)):
             targetLibrary = temp_library[i].find('strong').get_text()
-            print(targetLibrary)
             targetDataIndex = 0
             for j in range(len(temp_index_Data)):
                 if temp_index_SubData[i] > temp_index_Data[j]:
                     targetDataIndex = j
-                    print(data[j]['library'])
-                    data[j]['library'].append(targetLibrary)
+            data[targetDataIndex]['library'].append(targetLibrary)
         return data
 
     def setFirstTargetUrl(self, sourceCode):
