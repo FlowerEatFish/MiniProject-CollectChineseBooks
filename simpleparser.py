@@ -45,7 +45,7 @@ class SimpleParser():
         data = self.setFirstDataList(sourceCode)
         data = self.setFirstDataAllUrl(sourceCode, data)
         data = self.setFirstDataAllLibrary(sourceCode, data)
-        print('Layer 1 data:\n%s' % str(data))
+        #print('Layer 1 data:\n%s' % str(data))
         return self.getTargetLibrary(data)
 
     def setFirstDataList(self, sourceCode):
@@ -90,12 +90,15 @@ class SimpleParser():
         # set Library
         temp_library = sourceCode.find_all(class_ = 'browseSubEntryData')
         for i in range(len(temp_index_SubData)):
-            targetLibrary = temp_library[i].find('strong').get_text()
-            targetDataIndex = 0
-            for j in range(len(temp_index_Data)):
-                if temp_index_SubData[i] > temp_index_Data[j]:
-                    targetDataIndex = j
-            data[targetDataIndex]['library'].append(targetLibrary)
+            try:
+                targetLibrary = temp_library[i].find('strong').get_text()
+                targetDataIndex = 0
+                for j in range(len(temp_index_Data)):
+                    if temp_index_SubData[i] > temp_index_Data[j]:
+                        targetDataIndex = j
+                        data[targetDataIndex]['library'].append(targetLibrary)
+            except:
+                continue
         return data
 	# --- First Layer Domain | End ---
 
@@ -104,7 +107,7 @@ class SimpleParser():
         data = self.setSecondDataList(sourceCode)
         data = self.setSecondDataAllUrl(sourceCode, data)
         data = self.setSecondDataAllLibrary(sourceCode, data)
-        print('Layer 2 data:\n%s' % str(data))
+        #print('Layer 2 data:\n%s' % str(data))
         result = self.getTargetLibrary(data)
         return result
 
