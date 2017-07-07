@@ -46,7 +46,7 @@
 >
 > - [ ] Determine the book format (MARC21 or Chinese MARC).
 >
-> - [ ] Search special library for obtaining better book details.
+> - [x] Search special library for obtaining better book details.
 >
 > - [x] Collect book details from NBINET.
 >

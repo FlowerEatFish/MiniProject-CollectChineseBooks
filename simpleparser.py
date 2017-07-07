@@ -12,17 +12,17 @@ class SimpleParser():
 
     def __init__ (self, isbn):
         url = 'http://nbinet3.ncl.edu.tw/search*cht/i?SEARCH=%d+&searchscope=1' % isbn
-        print('Layer 1: %s' % url)
+        print('Layer 1:\n%s' % url)
         sourceCode = self.getFilterSourceCode(url)
         bookLayer = self.setLayer(sourceCode)
         if bookLayer == 'browseEntry':
             url = self.getFirstLayerData(sourceCode)
-            print('Layer 2: %s' % url)
+            print('Layer 2:\n%s' % url)
             sourceCode = self.getFilterSourceCode(url)
             bookLayer = self.setLayer(sourceCode)
         if bookLayer == 'browseSuperEntry':
             url = self.getSecondLayerData(sourceCode)
-            print('Layer 3: %s' % url)
+            print('Layer 3:\n%s' % url)
             sourceCode = self.getFilterSourceCode(url)
             bookLayer = self.setLayer(sourceCode)
         self.data = sourceCode
@@ -45,8 +45,8 @@ class SimpleParser():
         data = self.setFirstDataList(sourceCode)
         data = self.setFirstDataAllUrl(sourceCode, data)
         data = self.setFirstDataAllLibrary(sourceCode, data)
-        print('Layer 1 data: %s' % str(data))
-        return data[0]['url']
+        print('Layer 1 data:\n%s' % str(data))
+        return self.getTargetLibrary(data)
 
     def setFirstDataList(self, sourceCode):
         data = []
@@ -104,8 +104,9 @@ class SimpleParser():
         data = self.setSecondDataList(sourceCode)
         data = self.setSecondDataAllUrl(sourceCode, data)
         data = self.setSecondDataAllLibrary(sourceCode, data)
-        print('Layer 2 data: %s' % str(data))
-        return data[0]['url']
+        print('Layer 2 data:\n%s' % str(data))
+        result = self.getTargetLibrary(data)
+        return result
 
     def setSecondDataList(self, sourceCode):
         data = []
@@ -132,6 +133,15 @@ class SimpleParser():
             data[i]['library'] = result
         return data
 	# --- Second Layer Domain | End ---
+
+	# --- First & Second Layer Domain | Start ---
+    def getTargetLibrary(self, data):
+        for i in data:
+            for j in self.libraryList:
+                temp = str(i['library'])
+                if temp.find(j) > 0:
+                    return i['url']
+        return data[0]['url']
 
 # Demo
 if __name__ == '__main__':
