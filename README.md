@@ -16,30 +16,40 @@
 >
 > openpyxl v2.4.2
 >
-> beautifulsoup4 v4.5.3
+> beautifulsoup4 v4.*
 
 ***
 
 > #### Porject Flows:
 >
-> Read Microsoft Office Excel file -> Catch ISBN -> Collect Star from NBINET -> Write Microsoft Office Excel file -> Determine the book format -> Arrange the order of the books depent on format.
+> 1. Read Microsoft Office Excel file.
+>
+> 2. Catch ISBN from Excel file.
+>
+> 3. Collect book details from NBINET via ISBN.
+>
+> 4. Search special library for obtaining better book details.
+>
+> 5. Write book details into Excel file.
 
 ***
 
 > #### Progress:
 >
+> - [x] Manual find the path of .xlsx file.
+>
 > - [x] Read .xlsx file.
 >
+> - [x] Auto detect the amount of the books from .xlsx file.
+>
 > - [x] Catch ISBN in .xlsx file.
+>
+> - [ ] Determine the book format (MARC21 or Chinese MARC).
+>
+> - [ ] Search special library for obtaining better book details.
 >
 > - [x] Collect book details from NBINET.
 >
 > - [x] Write .xlsx file.
 >
 > - [ ] Design user interface (UI).
->
-> - [x] Manual find the path of .xlsx file.
->
-> - [x] Auto find the amount of the books from .xlsx file.
->
-> - [ ] Determine the book format (MARC21 or Chinese MARC).

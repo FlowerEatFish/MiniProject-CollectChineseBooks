@@ -17,12 +17,11 @@ class SimpleParser():
         bookLayer = self.setLayer(sourceCode)
         if bookLayer == 'browseEntry':
             url = self.getFirstLayerData(sourceCode)
-            #url = self.setFirstTargetUrl(sourceCode)
             print('Layer 2: %s' % url)
             sourceCode = self.getFilterSourceCode(url)
             bookLayer = self.setLayer(sourceCode)
         if bookLayer == 'browseSuperEntry':
-            url = self.setSecondTargetUrl(sourceCode)
+            url = self.getSecondLayerData(sourceCode)
             print('Layer 3: %s' % url)
             sourceCode = self.getFilterSourceCode(url)
             bookLayer = self.setLayer(sourceCode)
@@ -41,15 +40,15 @@ class SimpleParser():
                 return i
         return None
 
-    # First Layer Domain
+    # --- First Layer Domain | Start ---
     def getFirstLayerData(self, sourceCode):
-        data = self.setDataList(sourceCode)
-        data = self.setDataAllUrl(sourceCode, data)
-        data = self.setDataAllLibrary(sourceCode, data)
+        data = self.setFirstDataList(sourceCode)
+        data = self.setFirstDataAllUrl(sourceCode, data)
+        data = self.setFirstDataAllLibrary(sourceCode, data)
         print('Layer 1 data: %s' % str(data))
         return data[0]['url']
 
-    def setDataList(self, sourceCode):
+    def setFirstDataList(self, sourceCode):
         data = []
         sourceCode_string = sourceCode.prettify()
         count = sourceCode_string.count('browseEntryData')
@@ -58,7 +57,7 @@ class SimpleParser():
             data.append(temp)
         return data
 
-    def setDataAllUrl(self, sourceCode, data):
+    def setFirstDataAllUrl(self, sourceCode, data):
         parser = sourceCode.find_all(class_ = 'browseEntryData')
         for i in range(len(data)):
             result = parser[i].find_all('a')
@@ -67,7 +66,7 @@ class SimpleParser():
             data[i]['url'] = result
         return data
 
-    def setDataAllLibrary(self, sourceCode, data):
+    def setFirstDataAllLibrary(self, sourceCode, data):
         # set temp_index_Data
         temp_index_Data = []
         index = 0
@@ -98,19 +97,41 @@ class SimpleParser():
                     targetDataIndex = j
             data[targetDataIndex]['library'].append(targetLibrary)
         return data
+	# --- First Layer Domain | End ---
 
-    def setFirstTargetUrl(self, sourceCode):
-        result = sourceCode.find(class_ = 'browseEntryData')
-        result = result.find_all('a')
-        result = result[1]['href']
-        return 'http://nbinet3.ncl.edu.tw%s' % result
+	# --- Second Layer Domain | Start ---
+    def getSecondLayerData(self, sourceCode):
+        data = self.setSecondDataList(sourceCode)
+        data = self.setSecondDataAllUrl(sourceCode, data)
+        data = self.setSecondDataAllLibrary(sourceCode, data)
+        print('Layer 2 data: %s' % str(data))
+        return data[0]['url']
 
-	# Second Layer Domain
-    def setSecondTargetUrl(self, sourceCode):
-        result = sourceCode.find(class_ = 'briefcitTitle')
-        result = result.find('a')
-        result = result['href']
-        return 'http://nbinet3.ncl.edu.tw%s' % result
+    def setSecondDataList(self, sourceCode):
+        data = []
+        sourceCode_string = sourceCode.prettify()
+        count = sourceCode_string.count('briefCitRow')
+        for i in range(count):
+            temp = {'url': None, 'library': []}
+            data.append(temp)
+        return data
+
+    def setSecondDataAllUrl(self, sourceCode, data):
+        parser = sourceCode.find_all(class_ = 'briefcitTitle')
+        for i in range(len(data)):
+            result = parser[i].find_all('a')
+            result = result[0]['href']
+            result = 'http://nbinet3.ncl.edu.tw%s' % result
+            data[i]['url'] = result
+        return data
+
+    def setSecondDataAllLibrary(self, sourceCode, data):
+        parser = sourceCode.find_all(class_ = 'briefcitStatus')
+        for i in range(len(data)):
+            result = parser[i].get_text()
+            data[i]['library'] = result
+        return data
+	# --- Second Layer Domain | End ---
 
 # Demo
 if __name__ == '__main__':
