@@ -14,17 +14,17 @@ class SimpleParser():
         url = 'http://nbinet3.ncl.edu.tw/search*cht/i?SEARCH=%d+&searchscope=1' % isbn
         print('Layer 1:\n%s' % url)
         sourceCode = self.getFilterSourceCode(url)
-        bookLayer = self.setLayer(sourceCode)
+        bookLayer = self.setLayer(sourceCode, self.layerCheckList)
         if bookLayer == 'browseEntry':
             url = self.getFirstLayerData(sourceCode)
             print('Layer 2:\n%s' % url)
             sourceCode = self.getFilterSourceCode(url)
-            bookLayer = self.setLayer(sourceCode)
+            bookLayer = self.setLayer(sourceCode, self.layerCheckList)
         if bookLayer == 'browseSuperEntry':
             url = self.getSecondLayerData(sourceCode)
             print('Layer 3:\n%s' % url)
             sourceCode = self.getFilterSourceCode(url)
-            bookLayer = self.setLayer(sourceCode)
+            bookLayer = self.setLayer(sourceCode, self.layerCheckList)
         self.data = sourceCode
 
     def getFilterSourceCode(self, url):
@@ -34,8 +34,8 @@ class SimpleParser():
         sourceCode = BeautifulSoup(resource.text, 'html.parser')
         return sourceCode
 
-    def setLayer(self, sourceCode):
-        for i in self.layerCheckList:
+    def setLayer(self, sourceCode, layerCheckList):
+        for i in layerCheckList:
             if sourceCode.prettify().find('%s' % i) > -1:
                 return i
         return None
@@ -46,7 +46,8 @@ class SimpleParser():
         data = self.setFirstDataAllUrl(sourceCode, data)
         data = self.setFirstDataAllLibrary(sourceCode, data)
         #print('Layer 1 data:\n%s' % str(data))
-        return self.getTargetLibrary(data)
+        result = self.getTargetLibrary(data, self.libraryList)
+        return result
 
     def setFirstDataList(self, sourceCode):
         data = []
@@ -108,7 +109,7 @@ class SimpleParser():
         data = self.setSecondDataAllUrl(sourceCode, data)
         data = self.setSecondDataAllLibrary(sourceCode, data)
         #print('Layer 2 data:\n%s' % str(data))
-        result = self.getTargetLibrary(data)
+        result = self.getTargetLibrary(data, self.libraryList)
         return result
 
     def setSecondDataList(self, sourceCode):
@@ -138,12 +139,14 @@ class SimpleParser():
 	# --- Second Layer Domain | End ---
 
 	# --- First & Second Layer Domain | Start ---
-    def getTargetLibrary(self, data):
+    def getTargetLibrary(self, data, libraryList):
         for i in data:
-            for j in self.libraryList:
+            for j in libraryList:
                 temp = str(i['library'])
                 if temp.find(j) > 0:
+					# if library includes in libraryList.
                     return i['url']
+		# if no library includes in libraryList.
         return data[0]['url']
 
 # Demo
