@@ -4,22 +4,24 @@ from bs4 import BeautifulSoup
 
 class SimpleParser():
     layerCheckList = ['browseEntry','browseSuperEntry','bibMain']
-    libraryList = ['淡江大學','成功大學','臺北市立圖書','國家圖書','新書書訊']
-    data = ''
     # browseEntry - First Layer
     # browseSuperEntry - Second Layer
     # bibMain - Third Layer
+    libraryList = ['淡江大學','成功大學','臺北市立圖書','國家圖書','新書書訊']
+    data = ''
 
     def __init__ (self, isbn):
         url = 'http://nbinet3.ncl.edu.tw/search*cht/i?SEARCH=%d+&searchscope=1' % isbn
         print('Layer 1:\n%s' % url)
         sourceCode = self.getFilterSourceCode(url)
         bookLayer = self.setLayer(sourceCode, self.layerCheckList)
+
         if bookLayer == 'browseEntry':
             url = self.getFirstLayerData(sourceCode)
             print('Layer 2:\n%s' % url)
             sourceCode = self.getFilterSourceCode(url)
             bookLayer = self.setLayer(sourceCode, self.layerCheckList)
+
         if bookLayer == 'browseSuperEntry':
             url = self.getSecondLayerData(sourceCode)
             print('Layer 3:\n%s' % url)
@@ -42,21 +44,12 @@ class SimpleParser():
 
     # --- First Layer Domain | Start ---
     def getFirstLayerData(self, sourceCode):
-        data = self.setFirstDataList(sourceCode)
+        data = self.setDataList(sourceCode, 'browseEntryData')
         data = self.setFirstDataAllUrl(sourceCode, data)
         data = self.setFirstDataAllLibrary(sourceCode, data)
         #print('Layer 1 data:\n%s' % str(data))
         result = self.getTargetLibrary(data, self.libraryList)
         return result
-
-    def setFirstDataList(self, sourceCode):
-        data = []
-        sourceCode_string = sourceCode.prettify()
-        count = sourceCode_string.count('browseEntryData')
-        for i in range(count):
-            temp = {'url': None, 'library': []}
-            data.append(temp)
-        return data
 
     def setFirstDataAllUrl(self, sourceCode, data):
         parser = sourceCode.find_all(class_ = 'browseEntryData')
@@ -105,21 +98,12 @@ class SimpleParser():
 
 	# --- Second Layer Domain | Start ---
     def getSecondLayerData(self, sourceCode):
-        data = self.setSecondDataList(sourceCode)
+        data = self.setDataList(sourceCode, 'briefCitRow')
         data = self.setSecondDataAllUrl(sourceCode, data)
         data = self.setSecondDataAllLibrary(sourceCode, data)
         #print('Layer 2 data:\n%s' % str(data))
         result = self.getTargetLibrary(data, self.libraryList)
         return result
-
-    def setSecondDataList(self, sourceCode):
-        data = []
-        sourceCode_string = sourceCode.prettify()
-        count = sourceCode_string.count('briefCitRow')
-        for i in range(count):
-            temp = {'url': None, 'library': []}
-            data.append(temp)
-        return data
 
     def setSecondDataAllUrl(self, sourceCode, data):
         parser = sourceCode.find_all(class_ = 'briefcitTitle')
@@ -139,12 +123,21 @@ class SimpleParser():
 	# --- Second Layer Domain | End ---
 
 	# --- First & Second Layer Domain | Start ---
+    def setDataList(self, sourceCode, targetClassName):
+        data = []
+        sourceCode_string = sourceCode.prettify()
+        count = sourceCode_string.count(targetClassName)
+        for i in range(count):
+            temp = {'url': None, 'library': []}
+            data.append(temp)
+        return data
+
     def getTargetLibrary(self, data, libraryList):
-        for i in data:
-            for j in libraryList:
+        for j in libraryList:
+            for i in data:
                 temp = str(i['library'])
                 if temp.find(j) > 0:
-					# if library includes in libraryList.
+		    		# if library includes in libraryList.
                     return i['url']
 		# if no library includes in libraryList.
         return data[0]['url']
