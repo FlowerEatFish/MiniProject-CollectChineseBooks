@@ -16,18 +16,21 @@ class SimpleParser():
         sourceCode = self.getFilterSourceCode(url)
         bookLayer = self.setLayer(sourceCode, self.layerCheckList)
 
-        if bookLayer == 'browseEntry':
-            url = self.getFirstLayerData(sourceCode)
-            print('Layer 2:\n%s' % url)
-            sourceCode = self.getFilterSourceCode(url)
-            bookLayer = self.setLayer(sourceCode, self.layerCheckList)
-
-        if bookLayer == 'browseSuperEntry':
-            url = self.getSecondLayerData(sourceCode)
-            print('Layer 3:\n%s' % url)
-            sourceCode = self.getFilterSourceCode(url)
-            bookLayer = self.setLayer(sourceCode, self.layerCheckList)
-        self.data = sourceCode
+        if self.isFileNotFound(sourceCode):
+            print('%d: File no found.' % isbn)
+            self.data = ''
+        else:
+            if bookLayer == 'browseEntry':
+                url = self.getFirstLayerData(sourceCode)
+                print('Layer 2:\n%s' % url)
+                sourceCode = self.getFilterSourceCode(url)
+                bookLayer = self.setLayer(sourceCode, self.layerCheckList)
+            if bookLayer == 'browseSuperEntry':
+                url = self.getSecondLayerData(sourceCode)
+                print('Layer 3:\n%s' % url)
+                sourceCode = self.getFilterSourceCode(url)
+                bookLayer = self.setLayer(sourceCode, self.layerCheckList)
+            self.data = sourceCode
 
     def getFilterSourceCode(self, url):
         browser = 'Chrome/55.0.2924.87'
@@ -41,6 +44,13 @@ class SimpleParser():
             if sourceCode.prettify().find('%s' % i) > -1:
                 return i
         return None
+
+    # if file no found
+    def isFileNotFound(self, sourceCode):
+        stringSourceCode = sourceCode.get_text()
+        if stringSourceCode.find('沒有查獲符合查詢條件的館藏') != -1:
+            return True
+        return False
 
     # --- First Layer Domain | Start ---
     def getFirstLayerData(self, sourceCode):

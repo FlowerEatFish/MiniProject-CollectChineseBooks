@@ -11,8 +11,11 @@ database = []
 for i in isbn.isbnList:
     if type(i) is int:
         parser = SimpleParser(i)
-        data = Book(parser.data)
-        database.append(data)
-        time.sleep(10)
+        if parser.data == '':
+            continue
+        else:
+            data = Book(parser.data)
+            database.append(data)
+        time.sleep(3)
 
 write.ExportResult(database)
