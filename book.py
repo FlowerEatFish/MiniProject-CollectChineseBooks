@@ -46,8 +46,12 @@ class Book():
     def setBookDetail(self, text, targetClass):
         if targetClass == 'title_author':
             parser = text.split(' / ')
-            self.title = parser[0]
-            self.author = parser[1]
+            if len(parser) > 1:
+                self.title = parser[0]
+                self.author = parser[1]
+            else:
+                self.title = parser[0]
+                self.author = 'none'
         if targetClass == 'edition':
             self.edition = text
         if targetClass == 'publisher':
