@@ -4,6 +4,20 @@
 [2]: https://img.shields.io/badge/license-no%20license-blue.svg
 ***
 
+## Introduction:
+
+It is used for searching information of chinese book from a Taiwan website called [NBINET](http://nbinet3.ncl.edu.tw/screens/opacmenu_cht.html), and create an excel file.
+
+> 2017-02-14
+>
+> Initially, I just built it to help me with repetitive work.
+>
+> 2017-09-14
+>
+> It has been completed for the construction of my request, but I will continue construct it better.
+
+***
+
 > #### [No License](https://choosealicense.com/no-license/):
 >
 > Everybody is forbidden to use, copy, distribute, and modify the project except contributors.
@@ -14,7 +28,7 @@
 >
 > Python v3.5.*
 >
-> openpyxl v2.4.2
+> openpyxl v2.4.*
 >
 > beautifulsoup4 v4.*
 
@@ -48,8 +62,10 @@
 >
 > - [x] Search special library for obtaining better book details.
 >
+> - [ ] Return null value if ISBN is invalid.
+>
 > - [x] Collect book details from NBINET.
 >
-> - [x] Write .xlsx file.
+> - [ ] Check progress on terminal.
 >
-> - [ ] Design user interface (UI).
+> - [x] Write .xlsx file.

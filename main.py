@@ -1,32 +1,25 @@
 # coding=UTF-8
-from simpleparser import *
-from read import *
-from book import *
-import write
+""" Python libraries. """
 import time
 import re
+""" Libraries from here. """
+import simpleparser
+import book
+import rwbook
 
-def isIntType(value):
-    try:
-        int(value)
-        return True
-    except:
-        return False
+ISBN = rwbook.Read()
+DATABASE = []
 
-isbn = IsbnCollection()
-database = []
-
-for i in isbn.isbnList:
-    # regular expression. remove non-number.
-    targetIsbn = re.sub(r'\D', "", i)
-    if isIntType(targetIsbn):
-        targetIsbn = int(targetIsbn)
-        parser = SimpleParser(targetIsbn)
+for i in ISBN.isbn_list:
+    target_isbn = re.sub(r'\D', "", str(i)) # regular expression. remove non-number.
+    if bool(target_isbn) and target_isbn is not None:
+        target_isbn = int(target_isbn)
+        parser = simpleparser.SimpleParser(target_isbn)
         if parser.data == '':
             continue
         else:
-            data = Book(parser.data)
-            database.append(data)
-        time.sleep(3)
+            data = book.Book(parser.data)
+            DATABASE.append(data)
+        time.sleep(1)
 
-write.ExportResult(database)
+rwbook.Write(DATABASE)
